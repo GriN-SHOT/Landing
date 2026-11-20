@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивный макет помощника по обращениям жителей Амурской области.">
+  <meta name="theme-color" content="#f4f8ff">
+  <title>Помощник жителя – Амурская область</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#request">К полю запроса</a>
+  <header class="site-header" id="top">
+    <div class="wrap masthead">
+      <a class="brand" href="#top">
+        <img src="assets/amur-coat.png" width="53" height="53" alt="Герб Амурской области">
+        <span><strong>Амурская область</strong><small>ИИ-помощник жителя</small></span>
+      </a>
+      <nav aria-label="Основная навигация">
+        <a href="#topics">Направления</a>
+        <a href="#how">Как это работает</a>
+      </nav>
+      <button type="button" class="button outline" data-example="housing">Пройти пример</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-art" aria-hidden="true"></div>
+      <div class="wrap hero-content">
+        <div class="intro">
+          <p class="mode"><span class="icon sparkle" aria-hidden="true"></span> Демонстрационный макет</p>
+          <h1 id="hero-title">Опишите проблему.<br><span>Подскажем,<br class="mobile-break"> куда обратиться</span></h1>
+          <p class="lede">Напишите своими словами. Помощник подберёт ведомство, уточнит детали и подготовит текст заявления.</p>
+        </div>
+        <form id="request-form" class="composer">
+          <span class="composer-icon icon chat" aria-hidden="true"></span>
+          <label class="sr-only" for="request">Опишите проблему</label>
+          <textarea id="request" rows="1" maxlength="1200" required placeholder="Например, третий день нет горячей воды"></textarea>
+          <button type="submit" class="button primary"><span class="icon sparkle" aria-hidden="true"></span> Спросить помощника</button>
+        </form>
+        <div class="examples" aria-label="Готовые примеры запросов">
+          <span>Попробуйте пример</span>
+          <button type="button" data-example="housing">Нет горячей воды</button>
+          <button type="button" data-example="health">Запись к врачу</button>
+          <button type="button" data-example="school">Перевод в школу</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap workspace" id="workspace" aria-labelledby="dialog-title" hidden>
+      <div class="panel dialog">
+        <div class="panel-head">
+          <div class="assistant-mark icon sparkle" aria-hidden="true"></div>
+          <div class="dialog-title"><h2 id="dialog-title" tabindex="-1">Диалог с ИИ-помощником</h2><span>Подбор адресата и подготовка заявления</span></div>
+          <button type="button" class="text-button" id="reset">Начать заново</button>
+        </div>
+        <div class="conversation" id="conversation" role="log" aria-label="Сообщения" aria-live="polite"></div>
+        <div class="choices" id="choices" hidden></div>
+        <form class="followup" id="detail-form" hidden>
+          <label for="detail" id="detail-label">Уточните информацию</label>
+          <div class="detail-line">
+            <input id="detail" maxlength="200" required autocomplete="off" type="text">
+            <button class="button primary" type="submit">Продолжить</button>
+          </div>
+          <button type="button" class="text-button sample" id="autofill">Использовать данные примера</button>
+        </form>
+        <div id="result" class="result" hidden>
+          <div class="draft">
+            <label for="draft-text" id="draft-label" tabindex="-1">Черновик заявления</label>
+            <p class="result-note">Демонстрационный шаблон. Текст можно отредактировать.</p>
+            <textarea id="draft-text" rows="10" spellcheck="true"></textarea>
+            <div class="result-actions">
+              <button type="button" class="button outline" id="copy">Скопировать</button>
+              <button type="button" class="button outline" id="download">Скачать TXT</button>
+            </div>
+            <p id="copy-status" class="copy-status" role="status"></p>
+          </div>
+          <div class="routing">
+            <p class="routing-label">Адресат в примере</p>
+            <h3 id="agency-name"></h3>
+            <h4>Как подать заявление</h4>
+            <ol>
+              <li>Откройте сайт ведомства и найдите раздел для обращений граждан.</li>
+              <li>Проверьте, подходит ли этот канал для вашей ситуации, и заполните поля формы.</li>
+              <li>Вставьте текст, добавьте необходимые документы и отправьте обращение на официальном сайте.</li>
+            </ol>
+            <a id="agency-link" class="button primary" target="_blank" rel="noopener noreferrer">Перейти на сайт ведомства<span class="sr-only"> (новая вкладка)</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap topics" id="topics" aria-labelledby="topics-title">
+      <div class="section-heading"><h2 id="topics-title">Выберите направление</h2><p>Каждая карточка запускает пример диалога</p></div>
+      <div class="topic-grid">
+        <button type="button" class="topic housing" data-example="housing">
+          <span class="tile-icon"><span class="icon house" aria-hidden="true"></span></span>
+          <span class="topic-copy"><strong>ЖКХ</strong><span>Вода, отопление и содержание дома</span></span>
+          <span class="tile-end icon chevron" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="topic health" data-example="health">
+          <span class="tile-icon"><span class="icon cross" aria-hidden="true"></span></span>
+          <span class="topic-copy"><strong>Медицина</strong><span>Поликлиники и запись на приём</span></span>
+          <span class="tile-end icon chevron" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="topic school" data-example="school">
+          <span class="tile-icon"><span class="icon cap" aria-hidden="true"></span></span>
+          <span class="topic-copy"><strong>Образование</strong><span>Школы и детские сады</span></span>
+          <span class="tile-end icon chevron" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="wrap how" id="how" aria-labelledby="how-title">
+      <div class="how-inner">
+        <h2 id="how-title">Как это работает</h2>
+        <ol>
+          <li><span aria-hidden="true" class="step-number">1</span><div><strong>Опишите ситуацию</strong><p>Введите запрос или выберите пример.</p></div></li>
+          <li><span aria-hidden="true" class="step-number">2</span><div><strong>Уточните детали</strong><p>Помощник подберёт ведомство и задаст вопрос, если данных мало.</p></div></li>
+          <li><span aria-hidden="true" class="step-number">3</span><div><strong>Получите заявление</strong><p>Проверьте текст и откройте сайт ведомства.</p></div></li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-content"><span>Помощник жителя · Амурская область</span><span>Демонстрация · Обращения не отправляются</span></div></footer>
+</body>
+</html>
